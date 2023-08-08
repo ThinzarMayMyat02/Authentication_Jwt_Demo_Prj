@@ -23,7 +23,7 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtils {
 
-    private static final Logger Logger = LoggerFactory.getLogger(JwtUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
     @Value("${sip.app.jwtSecret}")
     private String jwtSecret;
@@ -56,13 +56,13 @@ public class JwtUtils {
             Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
             return true;
         } catch (MalformedJwtException e) {
-
+            logger.error("Invalid Jwt Token: {} "+e.getMessage());
         } catch (ExpiredJwtException e) {
-
+            logger.error("Jwt token is expired: {} "+e.getMessage());
         } catch (UnsupportedJwtException e) {
-
+            logger.error("Jwt token is unsupported: {} "+e.getMessage());
         } catch (IllegalArgumentException e) {
-
+            logger.error("Jwt claim string is empty: {} ", e.getMessage());
         }
 
         return false;
